@@ -1,12 +1,25 @@
-from flask import Flask, jsonify
-from arxiv_scraper import *
+from flask import Flask, render_template, request, jsonify
 from filter_papers import *
+from arxiv_scraper import Paper  # Assuming this is your model for papers
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return 'Welcome to my paper ranking website!'
+    return render_template('index.html')
+
+@app.route('/search', methods=['POST'])
+def search():
+    search_term = request.form['search_term']
+    # Here, you should call the appropriate function from filter_papers.py
+    # For demonstration, I'm assuming you'll process the search term to get papers
+    # This is a simplified example. You'll need to adapt it based on your actual data and functions
+    papers = [Paper(arxiv_id="1234.5678", title=search_term, authors=["Author 1"], abstract="Sample abstract")]
+    paper_strings = [paper_to_string(paper) for paper in papers]
+    # Call the function from filter_papers.py
+    # You'll need to pass the appropriate arguments based on your function's requirements
+    filtered_papers = run_on_batch(paper_strings, "Your base prompt", "Your criterion", "Your postfix prompt")
+    return jsonify(filtered_papers)
 
 @app.route('/scrape')
 def scrape_papers():
