@@ -10,10 +10,9 @@ def index():
 
 @app.route('/scrape')
 def scrape_papers():
+    search_term = request.args.get('search', 'math.AC')  # Default to 'math.AC' if no search term is provided
     try:
-        # Call the scraping function. Replace 'math.AC' with the desired area
-        papers = get_papers_from_arxiv_rss_api('math.AC', None)
-        # Convert the papers to JSON
+        papers = get_papers_from_arxiv_rss_api(search_term, None)
         papers_json = json.dumps(papers, cls=EnhancedJSONEncoder)
         return papers_json
     except Exception as e:
