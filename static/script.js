@@ -24,4 +24,3 @@ function displayResults(results) {
         resultsDiv.appendChild(paperDiv);
     });
 }
-
