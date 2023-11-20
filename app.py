@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify
 from arxiv_scraper import *
 from filter_papers import *
 
@@ -6,13 +6,16 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return 'Welcome to my paper ranking website!'
 
 @app.route('/scrape')
 def scrape_papers():
     try:
-        scraped_papers = scrape_arxiv_papers()
-        return jsonify(scraped_papers)
+        # Call the scraping function. Replace 'math.AC' with the desired area
+        papers = get_papers_from_arxiv_rss_api('math.AC', None)
+        # Convert the papers to JSON
+        papers_json = json.dumps(papers, cls=EnhancedJSONEncoder)
+        return papers_json
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
