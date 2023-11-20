@@ -4,6 +4,10 @@ from filter_papers import *
 
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return 'Welcome to my paper ranking website!'
+
 @app.route('/scrape')
 def scrape_papers():
     try:
