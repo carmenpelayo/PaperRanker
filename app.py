@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from arxiv_scraper import *
 from filter_papers import *
 
@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'Welcome to my paper ranking website!'
+    return render_template('index.html')
 
 @app.route('/scrape')
 def scrape_papers():
