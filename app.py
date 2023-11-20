@@ -1,3 +1,9 @@
+from flask import Flask, jsonify
+from arxiv_scraper import *
+from filter_papers import *
+
+app = Flask(__name__)
+
 @app.route('/scrape')
 def scrape_papers():
     try:
