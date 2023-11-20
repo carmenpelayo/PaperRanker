@@ -1,17 +1,27 @@
-async function fetchPapers() {
-    try {
-        const response = await fetch('/api/papers'); // Adjust the API endpoint as needed
-        const papers = await response.json();
-        const paperListElement = document.getElementById('paper-list');
-        papers.forEach(paper => {
-            const paperElement = document.createElement('div');
-            paperElement.className = 'paper';
-            paperElement.innerHTML = `<h2>${paper.title}</h2><p>${paper.authors.join(', ')}</p>`;
-            paperListElement.appendChild(paperElement);
-        });
-    } catch (error) {
-        console.error('Error fetching papers:', error);
-    }
+document.getElementById('search-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var searchTerm = document.getElementById('search-field').value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/scrape?search=' + encodeURIComponent(searchTerm), true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var results = JSON.parse(xhr.responseText);
+            displayResults(results);
+        } else {
+            console.error('Error fetching data');
+        }
+    };
+    xhr.send();
+});
+
+function displayResults(results) {
+    var resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = ''; // Clear previous results
+    results.forEach(function(paper) {
+        var paperDiv = document.createElement('div');
+        paperDiv.innerHTML = 'Title: ' + paper.title + '<br>Authors: ' + paper.authors.join(', ');
+        resultsDiv.appendChild(paperDiv);
+    });
 }
 
-document.addEventListener('DOMContentLoaded', fetchPapers);
